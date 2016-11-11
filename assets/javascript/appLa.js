@@ -1,7 +1,7 @@
 $(function() {
     console.log( "ready!" );
     //created empty array to hold search data for each API
-    var searchDataYelp = [];
+  var searchDataYelp = [];
     var searchDataForecast = [];
     var searchDataTripAdvisor = [];
 
