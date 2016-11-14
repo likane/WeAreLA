@@ -29,30 +29,30 @@
 
 //Interval func to change background image
 
-	$(document).ready(function() {
+	// $(document).ready(function() {
 
-			var count = 0;
-			function displayImage() {
-			$("#background").html("<img src=" +backImage[count]);
-		}
+	// 		var count = 0;
+	// 		function displayImage() {
+	// 		$("#background").html("<img src=" +backImage[count]);
+	// 	}
 
-		function nextImage() {
-			count ++;
+	// 	function nextImage() {
+	// 		count ++;
 
-			//setTimeout(displayImage, 1000);
+	// 		//setTimeout(displayImage, 1000);
 
-			if (count==backImage.length){
-				count = 0;
-			}
-		}
+	// 		if (count==backImage.length){
+	// 			count = 0;
+	// 		}
+	// 	}
 
-		function startSlideshow() {
-			setInterval(nextImage, 3000);
-		}
+	// 	function startSlideshow() {
+	// 		setInterval(nextImage, 3000);
+	// 	}
 
-		displayImage();
+	// 	displayImage();
 
-	});
+	// });
 
 
 
@@ -65,67 +65,67 @@
 		//var longLA = "118.2437";
 		function weatherFunc() {
 				// Create the XHR object.
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ("withCredentials" in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, true);
-  } else if (typeof XDomainRequest != "undefined") {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
-}
+// function createCORSRequest(method, url) {
+//   var xhr = new XMLHttpRequest();
+//   if ("withCredentials" in xhr) {
+//     // XHR for Chrome/Firefox/Opera/Safari.
+//     xhr.open(method, url, true);
+//   } else if (typeof XDomainRequest != "undefined") {
+//     // XDomainRequest for IE.
+//     xhr = new XDomainRequest();
+//     xhr.open(method, url);
+//   } else {
+//     // CORS not supported.
+//     xhr = null;
+//   }
+//   return xhr;
+// }
 
-// Helper method to parse the title tag from the response.
-function getTitle(text) {
-  return text.match('<title>(.*)?</title>')[1];
-}
+// // Helper method to parse the title tag from the response.
+// function getTitle(text) {
+//   return text.match('<title>(.*)?</title>')[1];
+// }
 
-// Make the actual CORS request.
-function makeCorsRequest() {
-  // This is a sample server that supports CORS.
-  var url = 'http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=SW1&query=34.0522,118.2437&temp_unit=f';
+// // Make the actual CORS request.
+// function makeCorsRequest() {
+//   // This is a sample server that supports CORS.
+//   var url = 'http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=SW1&query=34.0522,118.2437&temp_unit=f';
 
-  var xhr = createCORSRequest('GET', url);
-  if (!xhr) {
-    alert('CORS not supported');
-    return;
-  }
+//   var xhr = createCORSRequest('GET', url);
+//   if (!xhr) {
+//     alert('CORS not supported');
+//     return;
+//   }
 
-  // Response handlers.
-  xhr.onload = function() {
-    var text = xhr.responseText;
-    var title = getTitle(text);
-    alert('Response from CORS request to ' + url + ': ' + title);
-  };
+//   // Response handlers.
+//   xhr.onload = function() {
+//     var text = xhr.responseText;
+//     var title = getTitle(text);
+//     alert('Response from CORS request to ' + url + ': ' + title);
+//   };
 
-  xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
-  };
+//   xhr.onerror = function() {
+//     alert('Woops, there was an error making the request.');
+//   };
 
-  console.log(xhr.send());
-}
+//   console.log(xhr.send());
+// }
 
-			// var weatherURL = "http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=SW1&query=34.0522,118.2437&temp_unit=f";
+			var weatherURL = "https://crossorigin.me/http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=SW1&query=34.0522,118.2437&temp_unit=f";
 
-			// $.ajax({
-			// 	url: weatherURL, 
-			// 	method: 'GET',
-			// 	beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Request-Headers', 'Content-Type');}
-			// })
-			// 	.done(function(response){
-			// 		//var newTemp = response.main.temp;
-			// 		//console.log(newTemp);
+			$.ajax({
+				url: weatherURL, 
+				method: 'GET',
+				//beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Request-Headers', 'Content-Type');}
+			})
+				.done(function(response){
+					//var newTemp = response.main.temp;
+					//console.log(newTemp);
 
-			// 		jsonResponse = response;
-			// 		console.log(response);
-			// 		console.log(JSON.stringify(response));
-			// 	});
+					//jsonResponse = response;
+					//console.log(response);
+					console.log(JSON.stringify(response));
+				});
 //end bracket for WEATHER API 
 		};
 
@@ -142,7 +142,7 @@ function makeCorsRequest() {
 				var googlePlacesAPIKey = "AIzaSyAP7EcFJzFFX8ExmGcNIQTfq8wpaZ-NeTg";
 
 				//Set queryURL && get JSON response
-				var googleQueryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670,151.1957&radius=500&types=food&name=cruise&key=' + googlePlacesAPIKey;
+				var googleQueryURL = 'https://crossorigin.me/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670,151.1957&radius=500&types=food&name=cruise&key=' + googlePlacesAPIKey;
 
 				console.log(googleQueryURL);
 
@@ -196,6 +196,7 @@ function makeCorsRequest() {
 		event.preventDefault();
 		validateForm();
 		weatherFunc();
+		googlePlacesFunc();
 		renderSearchData();
 
 
