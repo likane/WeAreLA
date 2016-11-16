@@ -1,110 +1,657 @@
-var jsonResponse = [];
-var searchDataGooglePlaces = [];
-var backImage = ["LA1.jpg", "la2.jpg", "la3.jpg"];
+
+//$(Function(){
+
+
+	var jsonResponse =[];
+	var searchDataGooglePlaces = [];
+	var backImage = ["LA1.jpg", "la2.jpg", "la3.jpg"];
+
+//Interval func to change background image
+
+	// $(document).ready(function() {
+
+	// 		var count = 0;
+	// 		function displayImage() {
+	// 		$("#background").html("<img src=" +backImage[count]);
+	// 	}
+
+	// 	function nextImage() {
+	// 		count ++;
+
+	// 		//setTimeout(displayImage, 1000);
+
+	// 		if (count==backImage.length){
+	// 			count = 0;
+	// 		}
+	// 	}
+
+	// 	function startSlideshow() {
+	// 		setInterval(nextImage, 3000);
+	// 	}
+
+	// 	displayImage();
+
+	// });
 
 
 
 
 //+++++++++++++++++++++++++++++  API 1 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//WEATHER API PLACE IN ON CLICK FUNCTION OF BUTTON
+	//WEATHER API PLACE IN ON CLICK FUNCTION OF BUTTON
+		
+		//var latLA = "34.0522";
+		//var longLA = "118.2437";
+		function weatherFunc() {
+				
 
-//var latLA = "34.0522";
-//var longLA = "118.2437";
-function weatherFunc() {
-    var weatherURL = "https://crossorigin.me/http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=SW1&query=34.0522,118.2437&temp_unit=f";
-    $.ajax({
-            url: weatherURL,
-            method: 'GET',
-            //beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Request-Headers', 'Content-Type');}
-        })
-        .done(function(response) {
-            //var newTemp = response.main.temp;
-            //console.log(newTemp);
+			//var weatherURL = "https://crossorigin.me/http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=SW1&query=34.05,118.24&temp_unit=f";
+			var weatherURL = "https://crossorigin.me/http://www.myweather2.com/developer/forecast.ashx?uac=0dpgk8Hg31&output=json&query=34.05,118.24&temp_unit=f";
 
-            //jsonResponse = response;
-            //console.log(response);
-            console.log(JSON.stringify(response));
-        });
-    //end bracket for WEATHER API
-};
+			$.ajax({
+				url: weatherURL, 
+				method: 'GET',
+				//beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Request-Headers', 'Content-Type');}
+			})
+				.done(function(response){
+					console.log("response&&&",response)
+					var newTemp = response.weather.curren_weather[0].temp;
+					console.log("newTemp******",newTemp);
+
+					var showTemp = $("<h1>").text("Current Temp: " + newTemp + " F");
+
+					$(".tempratureDiv").append(showTemp);
+
+					
+					
+				});
+//end bracket for WEATHER API 
+		};
 
 //+++++++++++++++++++++++++++++  API 1 END +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++  API 2 +++++++++++++++++++++++++++++++++++++++++++++++++++++
-function googlePlacesFunc() {
-    //get user input from search bar
-    var userInput = $("#searchRender").val().trim();
-    console.log(userInput);
-    //assign google api key to variable
-    var googlePlacesAPIKey = "AIzaSyDKe8HM1IzfbmOzyIVZjVAZ4soU1Mo3i3g";
-    //Set queryURL && get JSON response
-    var googleQueryURL = 'https://crossorigin.me/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=	34.052235,-118.243683&radius=500&types=restaurant&keyword=' + userInput + '&key=' + googlePlacesAPIKey;
-    console.log("google places ",googleQueryURL);
-    $.ajax({
-        url: googleQueryURL,
-        method: "GET"
-    }).done(function(response) {
-        console.log("response ", JSON.stringify(response));
-    });
-    //end bracket for GOOGLE PLACES on click API
-};
+		function googlePlacesFunc() {
+			//get user input from search bar
+				var userInput = $("#searchRender").val().trim();
+				
+				console.log(userInput);
+
+				//assign google api key to variable
+				var googlePlacesAPIKey = "AIzaSyAP7EcFJzFFX8ExmGcNIQTfq8wpaZ-NeTg";
+
+				//Set queryURL && get JSON response
+				var googleQueryURL = 'https://crossorigin.me/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-34.05,118.24&radius=500&types=food&name=cruise&key=' + googlePlacesAPIKey;
+
+				console.log(googleQueryURL);
+
+				$.ajax({url:googleQueryURL, method: "GET"})
+				.done(function(response){
+					console.log("response ", JSON.stringify(response));
+				});
+
+		//end bracket for GOOGLE PLACES on click API
+		};
+	
 //+++++++++++++++++++++++++++++  API 2 END +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++  APPEND API VALUE'S TO HTML +++++++++++++++++++++++++++++++++++++++++++++++++++++
-function renderSearchData() {
+		function renderSearchData() {
+			
+			$("#searchResults").empty();
 
-    $("#searchResults").empty();
-
-    for (var i = 0; i < searchDataGooglePlaces.length; i++) {
-        var searchDivGooglePlaces = $("<div>");
-        searchDivGooglePlaces.addClass("google");
-        searchDivGooglePlaces.attr("data-name", searchDataGooglePlaces[i]);
-        searchDivGooglePlaces.text(searchDataGooglePlaces[i]);
-        $("#searchResults").append(searchDivGooglePlaces);
-        googlePlacesFunc();
-    };
-    // end bracket for adding  API info to html
-};
+			for (var i = 0; i < searchDataGooglePlaces.length; i++) {
+				var searchDivGooglePlaces = $("<div>");
+				searchDivGooglePlaces.addClass("yelpData");
+				searchDivGooglePlaces.attr("data-name", searchDataGooglePlaces[i]);
+        		searchDivGooglePlaces.text(searchDataGooglePlaces[i]);
+        		$("#searchResults").append(searchDivGooglePlaces);
+        		googlePlacesFunc();
+			};
+// end bracket for adding  API info to html
+		};
 
 //+++++++++++++++++++++++++++++  APPEND API VALUE'S TO HTML FUNC END +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++  USER FORM VALIDATION +++++++++++++++++++++++++++++++++++++++++++++++++++++
-//validate form for empty field
+	//validate form for empty field
 
-function validateForm() {
+		function validateForm (){
 
-    var empty = $("#searchRender").val().trim().replace(" ", " ");
-    if (!empty) {
-        console.log("Please search something before pressing enter");
-
-    } else if (empty == "!" || empty == "{" || empty == "}" || empty == "%") {
-        console.log("Please search without using '!', '{}' or '%'");
-    } else {
-        console.log(empty);
-    }
-    //end bracket for validateForm function
-}
+			var empty = $("#searchRender").val().trim().replace(" ", " ");
+			if (!empty) {
+				console.log("Please search something before pressing enter");
+				
+					} else if (empty == "!" || empty == "{" || empty == "}" || empty == "%"){
+					console.log("Please search without using '!', '{}' or '%'");
+						} else {
+						console.log(empty);
+						}
+	//end bracket for validateForm function
+			}
 //+++++++++++++++++++++++++++++  USER FORM VALIDATION END +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //Call all API and user functions at on click of main button
-$("#buttonRender").on("click", function(event) {
-    event.preventDefault();
-    validateForm();
-    weatherFunc();
-    googlePlacesFunc();
-    renderSearchData();
+	$("#buttonRender").on("click", function(event){
+		event.preventDefault();
+		validateForm();
+		weatherFunc();
+		googlePlacesFunc();
+		renderSearchData();
 
 
-    //end bracket for buttonRender on click function
-});
+//end bracket for buttonRender on click function
+	});
 
 //document.ready end bracket
 //});
 
-function renderSearch() {
-    //empty section
-    $("#someId").empty();
+function renderSearch(){
+  //empty section
+  $("#someId").empty();
 
-    //create 5 section
+  //create 5 section
 }
+
+
+
+
+
+
+
+
+
+
+
+// 11.15.16 (CHRIS) -- AREA BELOW IS RELATED TO USER UI, OPENING AND CLOSING TEXT
+
+
+
+// The MIT License (MIT)
+
+// Typed.js | Copyright (c) 2016 Matt Boldt | www.mattboldt.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+
+
+
+! function($) {
+
+	"use strict";
+
+	var Typed = function(el, options) {
+
+		// chosen element to manipulate text
+		this.el = $(el);
+
+		// options
+		this.options = $.extend({}, $.fn.typed.defaults, options);
+
+		// attribute to type into
+		this.isInput = this.el.is('input');
+		this.attr = this.options.attr;
+
+		// show cursor
+		this.showCursor = this.isInput ? false : this.options.showCursor;
+
+		// text content of element
+		this.elContent = this.attr ? this.el.attr(this.attr) : this.el.text();
+
+		// html or plain text
+		this.contentType = this.options.contentType;
+
+		// typing speed
+		this.typeSpeed = this.options.typeSpeed;
+
+		// add a delay before typing starts
+		this.startDelay = this.options.startDelay;
+
+		// backspacing speed
+		this.backSpeed = this.options.backSpeed;
+
+		// amount of time to wait before backspacing
+		this.backDelay = this.options.backDelay;
+
+		// div containing strings
+		this.stringsElement = this.options.stringsElement;
+
+		// input strings of text
+		this.strings = this.options.strings;
+
+		// character number position of current string
+		this.strPos = 0;
+
+		// current array position
+		this.arrayPos = 0;
+
+		// number to stop backspacing on.
+		// default 0, can change depending on how many chars
+		// you want to remove at the time
+		this.stopNum = 0;
+
+		// Looping logic
+		this.loop = this.options.loop;
+		this.loopCount = this.options.loopCount;
+		this.curLoop = 0;
+
+		// for stopping
+		this.stop = false;
+
+		// custom cursor
+		this.cursorChar = this.options.cursorChar;
+
+		// shuffle the strings
+		this.shuffle = this.options.shuffle;
+		// the order of strings
+		this.sequence = [];
+
+		// All systems go!
+		this.build();
+	};
+
+	Typed.prototype = {
+
+		constructor: Typed,
+
+		init: function() {
+			// begin the loop w/ first current string (global self.strings)
+			// current string will be passed as an argument each time after this
+			var self = this;
+			self.timeout = setTimeout(function() {
+				for (var i=0;i<self.strings.length;++i) self.sequence[i]=i;
+
+				// shuffle the array if true
+				if(self.shuffle) self.sequence = self.shuffleArray(self.sequence);
+
+				// Start typing
+				self.typewrite(self.strings[self.sequence[self.arrayPos]], self.strPos);
+			}, self.startDelay);
+		},
+
+		build: function() {
+			var self = this;
+			// Insert cursor
+			if (this.showCursor === true) {
+				this.cursor = $("<span class=\"typed-cursor\">" + this.cursorChar + "</span>");
+				this.el.after(this.cursor);
+			}
+			if (this.stringsElement) {
+				this.strings = [];
+				this.stringsElement.hide();
+				console.log(this.stringsElement.children());
+				var strings = this.stringsElement.children();
+				$.each(strings, function(key, value){
+					self.strings.push($(value).html());
+				});
+			}
+			this.init();
+		},
+
+		// pass current string state to each function, types 1 char per call
+		typewrite: function(curString, curStrPos) {
+			// exit when stopped
+			if (this.stop === true) {
+				return;
+			}
+
+			// varying values for setTimeout during typing
+			// can't be global since number changes each time loop is executed
+			var humanize = Math.round(Math.random() * (100 - 10)) + this.typeSpeed;
+			var self = this;
+
+			// ------------- optional ------------- //
+			// backpaces a certain string faster
+			// ------------------------------------ //
+			// if (self.arrayPos == 1){
+			//  self.backDelay = 50;
+			// }
+			// else{ self.backDelay = 500; }
+
+			// contain typing function in a timeout humanize'd delay
+			self.timeout = setTimeout(function() {
+				// check for an escape character before a pause value
+				// format: \^\d+ .. eg: ^1000 .. should be able to print the ^ too using ^^
+				// single ^ are removed from string
+				var charPause = 0;
+				var substr = curString.substr(curStrPos);
+				if (substr.charAt(0) === '^') {
+					var skip = 1; // skip atleast 1
+					if (/^\^\d+/.test(substr)) {
+						substr = /\d+/.exec(substr)[0];
+						skip += substr.length;
+						charPause = parseInt(substr);
+					}
+
+					// strip out the escape character and pause value so they're not printed
+					curString = curString.substring(0, curStrPos) + curString.substring(curStrPos + skip);
+				}
+
+				if (self.contentType === 'html') {
+					// skip over html tags while typing
+					var curChar = curString.substr(curStrPos).charAt(0)
+					if (curChar === '<' || curChar === '&') {
+						var tag = '';
+						var endTag = '';
+						if (curChar === '<') {
+							endTag = '>'
+						}
+						else {
+							endTag = ';'
+						}
+						while (curString.substr(curStrPos + 1).charAt(0) !== endTag) {
+							tag += curString.substr(curStrPos).charAt(0);
+							curStrPos++;
+							if (curStrPos + 1 > curString.length) { break; }
+						}
+						curStrPos++;
+						tag += endTag;
+					}
+				}
+
+				// timeout for any pause after a character
+				self.timeout = setTimeout(function() {
+					if (curStrPos === curString.length) {
+						// fires callback function
+						self.options.onStringTyped(self.arrayPos);
+
+						// is this the final string
+						if (self.arrayPos === self.strings.length - 1) {
+							// animation that occurs on the last typed string
+							self.options.callback();
+
+							self.curLoop++;
+
+							// quit if we wont loop back
+							if (self.loop === false || self.curLoop === self.loopCount)
+								return;
+						}
+
+						self.timeout = setTimeout(function() {
+							self.backspace(curString, curStrPos);
+						}, self.backDelay);
+
+					} else {
+
+						/* call before functions if applicable */
+						if (curStrPos === 0) {
+							self.options.preStringTyped(self.arrayPos);
+						}
+
+						// start typing each new char into existing string
+						// curString: arg, self.el.html: original text inside element
+						var nextString = curString.substr(0, curStrPos + 1);
+						if (self.attr) {
+							self.el.attr(self.attr, nextString);
+						} else {
+							if (self.isInput) {
+								self.el.val(nextString);
+							} else if (self.contentType === 'html') {
+								self.el.html(nextString);
+							} else {
+								self.el.text(nextString);
+							}
+						}
+
+						// add characters one by one
+						curStrPos++;
+						// loop the function
+						self.typewrite(curString, curStrPos);
+					}
+					// end of character pause
+				}, charPause);
+
+				// humanized value for typing
+			}, humanize);
+
+		},
+
+		backspace: function(curString, curStrPos) {
+			// exit when stopped
+			if (this.stop === true) {
+				return;
+			}
+
+			// varying values for setTimeout during typing
+			// can't be global since number changes each time loop is executed
+			var humanize = Math.round(Math.random() * (100 - 30)) + this.backSpeed;
+			var self = this;
+
+			self.timeout = setTimeout(function() {
+
+				// ----- this part is optional ----- //
+				// check string array position
+				// on the first string, only delete one word
+				// the stopNum actually represents the amount of chars to
+				// keep in the current string. In my case it's 14.
+				// if (self.arrayPos == 1){
+				//  self.stopNum = 14;
+				// }
+				//every other time, delete the whole typed string
+				// else{
+				//  self.stopNum = 0;
+				// }
+
+				if (self.contentType === 'html') {
+					// skip over html tags while backspacing
+					if (curString.substr(curStrPos).charAt(0) === '>') {
+						var tag = '';
+						while (curString.substr(curStrPos - 1).charAt(0) !== '<') {
+							tag -= curString.substr(curStrPos).charAt(0);
+							curStrPos--;
+							if (curStrPos < 0) { break; }
+						}
+						curStrPos--;
+						tag += '<';
+					}
+				}
+
+				// ----- continue important stuff ----- //
+				// replace text with base text + typed characters
+				var nextString = curString.substr(0, curStrPos);
+				if (self.attr) {
+					self.el.attr(self.attr, nextString);
+				} else {
+					if (self.isInput) {
+						self.el.val(nextString);
+					} else if (self.contentType === 'html') {
+						self.el.html(nextString);
+					} else {
+						self.el.text(nextString);
+					}
+				}
+
+				// if the number (id of character in current string) is
+				// less than the stop number, keep going
+				if (curStrPos > self.stopNum) {
+					// subtract characters one by one
+					curStrPos--;
+					// loop the function
+					self.backspace(curString, curStrPos);
+				}
+				// if the stop number has been reached, increase
+				// array position to next string
+				else if (curStrPos <= self.stopNum) {
+					self.arrayPos++;
+
+					if (self.arrayPos === self.strings.length) {
+						self.arrayPos = 0;
+
+						// Shuffle sequence again
+						if(self.shuffle) self.sequence = self.shuffleArray(self.sequence);
+
+						self.init();
+					} else
+						self.typewrite(self.strings[self.sequence[self.arrayPos]], curStrPos);
+				}
+
+				// humanized value for typing
+			}, humanize);
+
+		},
+		/**
+		 * Shuffles the numbers in the given array.
+		 * @param {Array} array
+		 * @returns {Array}
+		 */
+		shuffleArray: function(array) {
+			var tmp, current, top = array.length;
+			if(top) while(--top) {
+				current = Math.floor(Math.random() * (top + 1));
+				tmp = array[current];
+				array[current] = array[top];
+				array[top] = tmp;
+			}
+			return array;
+		},
+
+		// Start & Stop currently not working
+
+		// , stop: function() {
+		//     var self = this;
+
+		//     self.stop = true;
+		//     clearInterval(self.timeout);
+		// }
+
+		// , start: function() {
+		//     var self = this;
+		//     if(self.stop === false)
+		//        return;
+
+		//     this.stop = false;
+		//     this.init();
+		// }
+
+		// Reset and rebuild the element
+		reset: function() {
+			var self = this;
+			clearInterval(self.timeout);
+			var id = this.el.attr('id');
+			this.el.empty();
+			if (typeof this.cursor !== 'undefined') {
+        this.cursor.remove();
+      }
+			this.strPos = 0;
+			this.arrayPos = 0;
+			this.curLoop = 0;
+			// Send the callback
+			this.options.resetCallback();
+		}
+
+	};
+
+	$.fn.typed = function(option) {
+		return this.each(function() {
+			var $this = $(this),
+				data = $this.data('typed'),
+				options = typeof option == 'object' && option;
+			if (data) { data.reset(); }
+			$this.data('typed', (data = new Typed(this, options)));
+			if (typeof option == 'string') data[option]();
+		});
+	};
+
+	$.fn.typed.defaults = {
+		strings: ["These are the default values...", "You know what you should do?", "Use your own!", "Have a great day!"],
+		stringsElement: null,
+		// typing speed
+		typeSpeed: 0,
+		// time before typing starts
+		startDelay: 0,
+		// backspacing speed
+		backSpeed: 0,
+		// shuffle the strings
+		shuffle: false,
+		// time before backspacing
+		backDelay: 500,
+		// loop
+		loop: false,
+		// false = infinite
+		loopCount: false,
+		// show cursor
+		showCursor: true,
+		// character for cursor
+		cursorChar: "|",
+		// attribute to type (null == text)
+		attr: null,
+		// either html or text
+		contentType: 'html',
+		// call when done callback function
+		callback: function() {},
+		// starting callback function before each string
+		preStringTyped: function() {},
+		//callback for every typed string
+		onStringTyped: function() {},
+		// callback for reset
+		resetCallback: function() {}
+	};
+
+//This area is the settings for the text display. Speed, etc.
+}(window.jQuery);
+
+$(function(){
+
+     $("#typed").typed({
+            // strings: ["Typed.js is a <strong>jQuery</strong> plugin.", "It <em>types</em> out sentences.", "And then deletes them.", "Try it out!"],
+            stringsElement: $('#typed-strings'),
+            typeSpeed: 30,
+            backDelay: 500,
+            loop: true,
+            contentType: 'html', // or text
+            // defaults to false for infinite loop
+            loopCount: false,
+            callback: function(){ foo(); },
+            resetCallback: function() { newTyped(); }
+        });
+
+        $(".reset").click(function(){
+            $("#typed").typed('reset');
+        });
+
+    });
+
+    function newTyped(){ /* A new typed object */ }
+
+    function foo(){ console.log("Callback"); }
+
+$(function(){
+
+        $("#typed").typed({
+            // strings: ["Typed.js is a <strong>jQuery</strong> plugin.", "It <em>types</em> out sentences.", "And then deletes them.", "Try it out!"],
+            stringsElement: $('#typed-strings'),
+            typeSpeed: 30,
+            backDelay: 500,
+            loop: false,
+            contentType: 'html', // or text
+            // defaults to false for infinite loop
+            loopCount: false,
+            callback: function(){ foo(); },
+            resetCallback: function() { newTyped(); }
+        });
+
+        $(".reset").click(function(){
+            $("#typed").typed('reset');
+        });
+
+    });
+
+    function newTyped(){ /* A new typed object */ }
+
+    function foo(){ console.log("Callback"); }
